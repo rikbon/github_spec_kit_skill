@@ -17,7 +17,7 @@ Rather than relying on ad-hoc prompts ("vibe coding"), SDD treats requirements a
 
 ---
 
-## 🔑 Core Pillars
+## Core Pillars
 
 ### 1. Specification as Law
 Specifications are stored directly in the repository as Markdown documents. These documents represent a contract of expected behavior. AI agents consume the specification file to drive implementation, reducing drift and misalignment.
@@ -36,7 +36,7 @@ Rather than generating full features in a single prompt, SDD separates phases in
 
 ---
 
-## 📈 Why use SDD with AI Agents?
+## Why use SDD with AI Agents?
 
 - **Reduced Hallucinations**: Agents follow explicit specifications instead of inventing features.
 - **Predictable Outcomes**: Separation of functional specs from technical plans ensures product managers can audit requirements without reading code.

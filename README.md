@@ -1,4 +1,4 @@
-# 🚀 Spec-Kit Claude Code Skill Suite
+# Spec-Kit Claude Code Skill Suite
 
 An advanced, production-ready set of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/setup) skills implementing the **Spec-Driven Development (SDD)** workflow based on the open-source [GitHub Spec-Kit](https://github.com/github/spec-kit) project.
 
@@ -6,7 +6,7 @@ This toolkit replaces unguided AI development ("vibe coding") with a predictable
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
 1. [Introduction to Spec-Driven Development](docs/introduction.md)
 2. [Installation and Configuration](docs/installation.md)
@@ -19,7 +19,7 @@ This toolkit replaces unguided AI development ("vibe coding") with a predictable
 
 ---
 
-## 📦 What is Included?
+## What is Included?
 
 You can choose between two installation layouts, both located under the [.claude/skills/](.claude/skills/) folder:
 
@@ -36,7 +36,7 @@ Ten separate, dedicated skills.
 
 ---
 
-## ⚡ Quick Installation
+## Quick Installation
 
 Use the provided shell script to automate installation:
 
@@ -59,7 +59,7 @@ chmod +x install-skills.sh
 
 ---
 
-## 📚 SDD Workflow Overview
+## SDD Workflow Overview
 
 ```
 Specify ──> Clarify ──> Plan ──> Tasks ──> Implement ──> Converge ──> TasksToIssues
@@ -80,6 +80,6 @@ For a full step-by-step tutorial, see the [Spec-Kit Workflows Guide](docs/workfl
 
 ---
 
-## 🛡️ License
+## License
 
 This project is licensed under the terms of the **MIT License**. See the [LICENSE](LICENSE) file for the full license text.

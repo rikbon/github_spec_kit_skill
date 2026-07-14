@@ -4,7 +4,7 @@ The Spec-Kit Claude Code Skill Suite is designed to be highly customizable, supp
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 When initialized, Spec-Kit projects adhere to the following directory structure:
 
@@ -33,7 +33,7 @@ When initialized, Spec-Kit projects adhere to the following directory structure:
 
 ---
 
-## 🔌 Extension Hooks
+## Extension Hooks
 
 Spec-Kit supports pre-execution and post-execution hooks configured in `.specify/extensions.yml`. These hooks automate processes like committing code to Git, checking prerequisites, or triggering external audits.
 
@@ -67,7 +67,7 @@ hooks:
 
 ---
 
-## 🎨 Template Resolution
+## Template Resolution
 
 When copying templates (e.g., spec template, plan template, task template), the skill resolves paths in the following priority order:
 

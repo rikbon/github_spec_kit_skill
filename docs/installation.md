@@ -4,7 +4,7 @@ The Spec-Kit Claude Code Skill Suite can be installed either globally (making th
 
 ---
 
-## ⚡ Automated Installation
+## Automated Installation
 
 An executable installer script is provided in the root directory to automate the configuration:
 
@@ -25,7 +25,7 @@ chmod +x install-skills.sh
 
 ---
 
-## 🛠️ Manual Installation
+## Manual Installation
 
 If you prefer to configure your workspace manually:
 
@@ -51,7 +51,7 @@ cp -R .claude/skills/speckit-* ~/.claude/skills/
 
 ---
 
-## ⚙️ Configuration & Prerequisites
+## Configuration & Prerequisites
 
 To utilize the full capabilities of the skill suite, ensure the following tools are set up:
 

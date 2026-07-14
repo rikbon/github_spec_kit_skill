@@ -4,7 +4,7 @@ We welcome contributions to improve the Spec-Kit Claude Code Skill Suite. This g
 
 ---
 
-## 🛠️ Modifying the Skills
+## Modifying the Skills
 
 All skills are written in standard Markdown with YAML frontmatter.
 
@@ -28,7 +28,7 @@ disable-model-invocation: false
 
 ---
 
-## 🔌 Developing Extensions
+## Developing Extensions
 
 Extensions add new commands or automated scripts.
 
@@ -38,7 +38,7 @@ Extensions add new commands or automated scripts.
 
 ---
 
-## 🧪 Testing Your Changes
+## Testing Your Changes
 
 Before submitting a Pull Request:
 1. **Local verification**: Run the `./install-skills.sh --local` command inside a test repository and run Claude Code.

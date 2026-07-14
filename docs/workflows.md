@@ -4,7 +4,7 @@ This document provides a detailed breakdown of each phase in the Spec-Driven Dev
 
 ---
 
-## 🧭 Workflow Subcommands
+## Workflow Subcommands
 
 Whether you are using the unified command (`/speckit <subcommand>`) or granular commands (`/speckit-<subcommand>`), the execution flow remains identical:
 
@@ -23,7 +23,7 @@ Whether you are using the unified command (`/speckit <subcommand>`) or granular 
 
 ---
 
-## 🏃 Detailed Walkthrough
+## Detailed Walkthrough
 
 ### Step 1: `/speckit constitution`
 Use this command at the beginning of a project to set standard rules. Claude Code will help you fill out core principles:
@@ -79,7 +79,7 @@ If implementation is interrupted or feature drift occurs, check consistency and 
 ```text
 /speckit converge
 ```
-If no drift is found, it reports **"✅ Converged"**.
+If no drift is found, it reports **"Converged"**.
 
 ### Step 10: `/speckit taskstoissues`
 Sync the outstanding tasks in `tasks.md` directly to your GitHub repository as issues:

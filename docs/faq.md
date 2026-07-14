@@ -4,7 +4,7 @@ This document addresses common questions and troubleshooting topics when using S
 
 ---
 
-## ❓ General Questions
+## General Questions
 
 ### Q: Why should I use the Unified Skill `/speckit` instead of the Granular Skills?
 **A**: The unified skill organizes all Spec-Kit steps under a single entry point `/speckit <subcommand>`. This prevents cluttering Claude's slash-commands dropdown menu, making it easier to see other project-specific commands.
@@ -14,7 +14,7 @@ This document addresses common questions and troubleshooting topics when using S
 
 ---
 
-## ⚙️ Troubleshooting
+## Troubleshooting
 
 ### Q: What happens if the spec-kit bash scripts are missing from my project?
 **A**: Nothing will break. The skills have built-in **native fallbacks**. If Claude Code detects that the helper scripts under `.specify/scripts/bash/` (such as `setup-plan.sh` or `setup-tasks.sh`) are missing, it will automatically use its filesystem tools to resolve templates, directories, and task lists natively.
