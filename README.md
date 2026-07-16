@@ -1,6 +1,6 @@
-# Spec-Kit Claude Code Skill Suite
+# Spec-Kit Multi-Agent Skill Suite
 
-An advanced, production-ready set of [Claude Code](https://docs.anthropic.com/en/docs/claude-code/setup) skills implementing the **Spec-Driven Development (SDD)** workflow based on the open-source [GitHub Spec-Kit](https://github.com/github/spec-kit) project.
+An advanced, production-ready set of agent skills implementing the **Spec-Driven Development (SDD)** workflow based on the open-source [GitHub Spec-Kit](https://github.com/github/spec-kit) project. Compatible with **Claude Code**, **Google Antigravity / Agy**, **OpenAI Codex**, **OpenCode**, **Pi**, and other agents supporting the `SKILL.md` format.
 
 This toolkit replaces unguided AI development ("vibe coding") with a predictable, trace-driven process that treats specifications, architecture plans, and checklists as first-class executable artifacts.
 
@@ -21,40 +21,46 @@ This toolkit replaces unguided AI development ("vibe coding") with a predictable
 
 ## What is Included?
 
-You can choose between two installation layouts, both located under the [.claude/skills/](.claude/skills/) folder:
+You can choose between two installation layouts, both sourced from the [.claude/skills/](.claude/skills/) folder:
 
 ### 1. The Unified Skill (`/speckit`)
 A single, all-in-one skill located at [.claude/skills/speckit/SKILL.md](.claude/skills/speckit/SKILL.md).
 - **Command**: `/speckit <subcommand> [args]`
 - **Subcommands**: `constitution`, `specify`, `clarify`, `plan`, `checklist`, `analyze`, `tasks`, `implement`, `converge`, `taskstoissues`.
-- **Advantage**: Keeps the Claude Code slash-command menu neat by encapsulating the entire workflow.
+- **Advantage**: Keeps the agent slash-command menu neat by encapsulating the entire workflow.
 
 ### 2. The Granular Skill Suite (`/speckit-*`)
 Ten separate, dedicated skills.
 - **Commands**: `/speckit-constitution`, `/speckit-specify`, `/speckit-clarify`, `/speckit-plan`, `/speckit-checklist`, `/speckit-analyze`, `/speckit-tasks`, `/speckit-implement`, `/speckit-converge`, `/speckit-taskstoissues`.
-- **Advantage**: Provides dedicated slash-commands with direct auto-complete in the Claude terminal.
+- **Advantage**: Provides dedicated slash-commands with direct auto-complete in your agent's terminal.
 
 ---
 
 ## Quick Installation
 
-Use the provided shell script to automate installation:
+Use the provided shell script to automate installation for your target agent:
 
 ```bash
 # Set execute permission
 chmod +x install-skills.sh
 
-# Run installer (prompts for local/global and unified/granular choices)
+# Run installer (prompts for local/global, agent choice, and unified/granular choices)
 ./install-skills.sh
 ```
 
 ### Automation Presets
 ```bash
-# Install globally to ~/.claude/skills/ (Unified master command)
-./install-skills.sh --global --type unified
+# Install globally to ~/.claude/skills/ for Claude Code (Unified master command)
+./install-skills.sh --global --type unified --agent claude
 
-# Install locally to your current repository (Granular commands suite)
-./install-skills.sh --local --type granular
+# Install locally to your current repository for Antigravity/Agy (Unified master command)
+./install-skills.sh --local --type unified --agent antigravity
+
+# Install globally to ~/.agents/skills/ for OpenAI Codex (Granular commands suite)
+./install-skills.sh --global --type granular --agent codex
+
+# Install globally for all supported agents
+./install-skills.sh --global --type unified --agent all
 ```
 
 ---

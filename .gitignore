@@ -32,6 +32,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Claude Code configurations (except custom skills)
+# Agent configurations (except custom skills)
 .claude/*
 !.claude/skills/
+.agents/*
+!.agents/skills/
+.agent/*
+!.agent/skills/
+.opencode/*
+!.opencode/skills/

@@ -1,6 +1,6 @@
 # Architecture and Customization
 
-The Spec-Kit Claude Code Skill Suite is designed to be highly customizable, supporting templates and event-driven extension hooks.
+The Spec-Kit Multi-Agent Skill Suite is designed to be highly customizable, supporting templates and event-driven extension hooks.
 
 ---
 
@@ -9,8 +9,8 @@ The Spec-Kit Claude Code Skill Suite is designed to be highly customizable, supp
 When initialized, Spec-Kit projects adhere to the following directory structure:
 
 ```
-├── .claude/
-│   └── skills/                  # Claude Code skill definitions
+├── .claude/ or .agents/ or .opencode/
+│   └── skills/                  # Agent skill definitions
 ├── .specify/
 │   ├── memory/
 │   │   └── constitution.md      # Governing principles

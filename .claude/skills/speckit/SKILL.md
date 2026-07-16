@@ -34,7 +34,7 @@ When the user invokes this skill (e.g., `/speckit specify "build user auth"` or 
 2. **Native Tool Fallback (Self-Containment)**:
    Many spec-kit commands check prerequisites or resolve directories using local bash scripts under `.specify/scripts/bash/` (such as `check-prerequisites.sh`, `setup-plan.sh`, and `setup-tasks.sh`).
    - If these scripts are **missing** or fail to execute (e.g., on Windows without Git Bash or in a fresh repository), **you MUST NOT fail**. 
-   - Instead, fall back to native Claude Code commands and filesystem tools to scan for files, read `.specify/feature.json`, find the latest folder in `specs/`, and copy/create templates directly.
+   - Instead, fall back to native agent commands and filesystem tools to scan for files, read `.specify/feature.json`, find the latest folder in `specs/`, and copy/create templates directly.
 3. **Constitution Graceful Handling**:
    - If `.specify/memory/constitution.md` is missing, output: `⚠️ Warning: Project constitution.md not found. Establishing core principles is highly recommended before specification and planning. Proceeding with default guidelines.`
    - Run the command without crashing, but remind the user to run `/speckit constitution` to establish core principles.
@@ -50,7 +50,7 @@ When the user invokes this skill (e.g., `/speckit specify "build user auth"` or 
 ---
 
 ## 1. `/speckit constitution`
-**Goal**: Create or update the project's governing principles in `.specify/memory/constitution.md` (or `.claude/spec-kit/constitution.md` if not initialized with spec-kit CLI).
+**Goal**: Create or update the project's governing principles in `.specify/memory/constitution.md` (or `.claude/spec-kit/constitution.md`, `.agents/spec-kit/constitution.md`, or `.opencode/spec-kit/constitution.md` if not initialized with spec-kit CLI).
 
 ### Execution Flow:
 1. **Initialize/Load**:
@@ -61,7 +61,7 @@ When the user invokes this skill (e.g., `/speckit specify "build user auth"` or 
    - Otherwise, ask the user or infer principles based on the existing codebase (README, package.json, src structure, etc.).
    - Define versioning: increment MAJOR for backward-incompatible principle additions/changes, MINOR for new minor guidelines, PATCH for wording fixes.
 3. **Write and Report**:
-   - Save the constitution to `.specify/memory/constitution.md` (or `.claude/spec-kit/constitution.md`).
+   - Save the constitution to `.specify/memory/constitution.md` (or `.claude/spec-kit/constitution.md`, `.agents/spec-kit/constitution.md`, or `.opencode/spec-kit/constitution.md`).
    - Propagate changes: if principles change, check if `plan-template.md` or `tasks-template.md` require updates.
    - Output a **Sync Impact Report** detailing the version changes, modified principles, and a suggested git commit message.
 

@@ -1,6 +1,6 @@
 # Spec-Kit workflows
 
-This document provides a detailed breakdown of each phase in the Spec-Driven Development (SDD) lifecycle and how to trigger them using the Spec-Kit Claude Code skills.
+This document provides a detailed breakdown of each phase in the Spec-Driven Development (SDD) lifecycle and how to trigger them using the Spec-Kit agent skills.
 
 ---
 
@@ -26,7 +26,7 @@ Whether you are using the unified command (`/speckit <subcommand>`) or granular 
 ## Detailed Walkthrough
 
 ### Step 1: `/speckit constitution`
-Use this command at the beginning of a project to set standard rules. Claude Code will help you fill out core principles:
+Use this command at the beginning of a project to set standard rules. Your agent will help you fill out core principles:
 ```text
 /speckit constitution "Enforce strict TypeScript, REST API standards, and mandatory Vitest unit coverage above 90%."
 ```
@@ -38,7 +38,7 @@ Define functional goals without touching implementation details. Specify actors,
 ```
 
 ### Step 3: `/speckit clarify`
-Run this command to find ambiguities. Claude Code will scan the specification and ask up to 5 multiple-choice questions:
+Run this command to find ambiguities. Your agent will scan the specification and ask up to 5 multiple-choice questions:
 ```text
 /speckit clarify
 ```
@@ -69,7 +69,7 @@ Before writing code, verify that every requirement maps to a task and there are 
 ```
 
 ### Step 8: `/speckit implement`
-Let Claude Code process the backlog. It will check off each task in `tasks.md` as it writes files and runs tests:
+Let your agent process the backlog. It will check off each task in `tasks.md` as it writes files and runs tests:
 ```text
 /speckit implement
 ```
