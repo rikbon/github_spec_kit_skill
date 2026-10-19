@@ -1,90 +1,134 @@
-# Installation and Configuration
+# Installation and Configuration Guide
 
-The Spec-Kit Agent Skill Suite can be installed either globally (making the skills available across all project repositories) or locally (committing the skills to a specific repository).
+The **Spec-Kit Multi-Agent Skill Suite** supports flexible deployment across individual developer machines (**Global Installation**) and team-shared version control repositories (**Local Installation**).
 
 ---
 
-## Automated Installation
+## 1. Automated Installation (`install-skills.sh`)
 
-An executable installer script is provided in the root directory to automate the configuration:
+The repository includes an interactive, idempotent bash installer ([`install-skills.sh`](../install-skills.sh)) that provisions skill packages, helper scripts, and default templates.
 
 ```bash
-# Set execute permissions (if not already set)
+# Ensure the installer is executable
 chmod +x install-skills.sh
 
-# Run the installer
+# Launch interactive guided setup
 ./install-skills.sh
 ```
 
-### Installation Options
-
-- **Global Installation**:
-  Copies selected skills to your user profile's global agent config directory. This makes the commands available in any directory when you start your agent CLI or IDE.
-- **Local Installation**:
-  Copies selected skills to the agent config folder in your current working directory. Use this option if you want to share the skills with your development team via Git.
-- **Agent Selection**:
-  You can target a specific agent (e.g., `--agent claude`, `--agent antigravity` / `agy`, `--agent codex`, `--agent opencode`, `--agent pi`) or install for all of them using `--agent all`.
-
----
-
-## Supported Agents & Directories
-
-The automated installer natively maps skills to the paths expected by different AI coding agents:
-
-| Agent | Personal (Global) Skills | Project-Level (Local) Skills |
-| :--- | :--- | :--- |
-| **Claude Code** | `~/.claude/skills/` | `.claude/skills/` |
-| **Google Antigravity / Agy** | `~/.gemini/config/skills/` | `.agents/skills/` |
-| **OpenAI Codex** | `~/.agents/skills/` | `.agents/skills/` |
-| **OpenCode** | `~/.config/opencode/skills/` | `.opencode/skills/` |
-| **Pi / General** | `~/.agents/skills/` | `.agents/skills/` |
+### Interactive Prompts
+When invoked without flags, `install-skills.sh` prompts you for three choices:
+1. **Installation Destination**:
+   - `Globally (user home directory)`: Installs skills into your user profile so they are available across every project on your machine.
+   - `Locally (current repository)`: Installs skills into the current working directory and initializes `.specify/templates/` and `.specify/scripts/bash/` so your team can share the workflow via Git.
+2. **Target Agent**:
+   - `Claude Code`, `Google Antigravity / Agy`, `OpenAI Codex`, `OpenCode`, `Pi / General Agent (.agents)`, or `All Agents`.
+3. **Skill Layout Type**:
+   - `Unified (/speckit master command)`, `Granular (/speckit-* individual commands)`, or `Both`.
 
 ---
 
-## Manual Installation
+## 2. CLI Flags & Non-Interactive Automation
 
-If you prefer to configure your workspace manually:
+For CI/CD pipelines, dotfiles bootstrap scripts, or rapid setup, pass CLI arguments directly:
 
-### 1. Unified Skill (`/speckit`)
-To install the unified, subcommand-router skill (along with its bundled `references/`, `resources/`, and `scripts/`), copy the skill directory to your agent's skills path:
+| Flag | Short | Accepted Values | Default | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `--global` | `-g` | *(boolean flag)* | *(prompt)* | Install skills to the user's global home configuration directory. |
+| `--local` | `-l` | *(boolean flag)* | *(prompt)* | Install skills to the current repository workspace and bootstrap `.specify/`. |
+| `--type` | `-t` | `unified`, `granular`, `both` | `unified` *(when non-interactive)* | Select the single `/speckit` router skill, the 10 `/speckit-*` granular skills, or both. |
+| `--agent` | `-a` | `claude`, `antigravity` (`agy`), `codex`, `opencode`, `pi`, `all` | `claude` *(when non-interactive)* | Target specific AI coding agent directory conventions or install for all agents at once. |
+| `--help` | `-h` | *(boolean flag)* | — | Display usage instructions and exit. |
+
+### Common CLI Examples
 
 ```bash
-# Example for Claude Code (Global)
-mkdir -p ~/.claude/skills/speckit
-cp -R .claude/skills/speckit/. ~/.claude/skills/speckit/
+# Google Antigravity (Agy) — Local workspace install with Unified /speckit skill
+./install-skills.sh --local --type unified --agent antigravity
 
-# Example for Google Antigravity / Codex (Local)
-mkdir -p .agents/skills/speckit
-cp -R .claude/skills/speckit/. .agents/skills/speckit/
+# Claude Code — Global install with both Unified and Granular skills
+./install-skills.sh --global --type both --agent claude
+
+# OpenAI Codex — Global install with Granular /speckit-* commands
+./install-skills.sh --global --type granular --agent codex
+
+# OpenCode — Local workspace install with Unified skill
+./install-skills.sh --local --type unified --agent opencode
+
+# Multi-Agent Workstation — Install Unified skill globally for ALL supported agents
+./install-skills.sh --global --type unified --agent all
 ```
 
-### 2. Granular Skills (`/speckit-*`)
-To install the separate individual commands:
+---
+
+## 3. Supported Agents & Directory Mapping
+
+Each AI coding agent discovers `SKILL.md` packages from specific global and workspace-relative paths. `install-skills.sh` maps each agent to its canonical discovery path and deduplicates overlapping directories automatically:
+
+| AI Agent | Global Discovery Path (`--global`) | Project-Local Discovery Path (`--local`) | Invocation Syntax |
+| :--- | :--- | :--- | :--- |
+| **Claude Code** | `~/.claude/skills/` | `.claude/skills/` | `/speckit <subcommand>` or `/speckit-<subcommand>` |
+| **Google Antigravity (`agy`)** | `~/.gemini/config/skills/` | `.agents/skills/` | `/speckit <subcommand>` or natural-language skill activation |
+| **OpenAI Codex** | `~/.agents/skills/` | `.agents/skills/` | `$speckit` / `/speckit` or natural-language prompt |
+| **OpenCode** | `~/.config/opencode/skills/` | `.opencode/skills/` | `/speckit <subcommand>` or `/speckit-<subcommand>` |
+| **Pi / General Agents** | `~/.agents/skills/` | `.agents/skills/` | `/skill:speckit` or `/speckit` |
+
+---
+
+## 4. Manual Installation
+
+If you prefer to copy files manually without running `install-skills.sh`:
+
+### Option A: Unified Skill (`/speckit`)
+Copy the entire `.claude/skills/speckit/` directory (which includes `SKILL.md`, `references/`, `resources/templates/`, and `scripts/`):
 
 ```bash
-# Example for Claude Code (Global)
-mkdir -p ~/.claude/skills
-cp -R .claude/skills/speckit-* ~/.claude/skills/
+# Example: Google Antigravity (Global)
+mkdir -p ~/.gemini/config/skills/speckit
+cp -R .claude/skills/speckit/. ~/.gemini/config/skills/speckit/
 
-# Example for Google Antigravity / Codex (Local)
+# Example: Claude Code (Global)
+mkdir -p ~/.claude/skills/speckit
+cp -R .claude/skills/speckit/. ~/.claude/skills/speckit/
+```
+
+### Option B: Granular Skill Suite (`/speckit-*`)
+Copy the 10 individual `speckit-*` directories into your target skills folder:
+
+```bash
+# Example: Project-local (.agents/skills/)
 mkdir -p .agents/skills
 cp -R .claude/skills/speckit-* .agents/skills/
 ```
 
+### Option C: Provision `.specify/` Workspace Templates & Scripts (Optional for Local Projects)
+```bash
+cp -R .specify /path/to/your/project/.specify
+chmod +x /path/to/your/project/.specify/scripts/bash/*.sh
+```
+
 ---
 
-## Configuration & Prerequisites
+## 5. Environment & Tooling Prerequisites
 
-To utilize the full capabilities of the skill suite, ensure the following tools are set up:
+| Requirement | Required By | Purpose & Verification |
+| :--- | :--- | :--- |
+| **Git CLI** | All commands | Repository root detection and branch resolution (`git --version`). |
+| **POSIX Shell (`bash`)** | Optional (`scripts/bash/*.sh`) | Runs helper scripts (`check-prerequisites.sh`, `setup-plan.sh`, `setup-tasks.sh`). If unavailable, skills automatically fall back to native agent file tools. |
+| **GitHub MCP Server** *or* **GitHub CLI (`gh`)** | `/speckit taskstoissues` only | Authenticates with GitHub to list and create issues. Verify CLI auth via `gh auth status`. |
 
-### Tooling Prerequisites
-- **Agent CLI / IDE**: Installed and configured (e.g. `claude`, `agy`, `codex`, `opencode`).
-- **Git CLI**: Verified and initialized in target repositories.
-- **GitHub CLI (`gh`)**: Required specifically for the `taskstoissues` subcommand. Must be installed and authenticated (`gh auth login`).
-- **GitHub MCP Server or Native Tools**: Enables the agent to interact with issues, repositories, and PRs.
+---
 
-### Workspace Prerequisites
-The skills work out-of-the-box using built-in fallbacks. They are further enhanced by the presence of a `.specify/` configuration folder in your project root:
-- **`.specify/memory/constitution.md`**: Project-wide coding standards and principles.
-- **`.specify/templates/`**: Custom presets and templates for specs, plans, and tasks. (The local installer `./install-skills.sh --local` automatically provisions default templates if this folder is missing).
-- **`.specify/extensions.yml`**: Custom extension hooks to automate setup, commits, or tests.
+## 6. Post-Installation Verification
+
+After installing, open your agent in any repository and run:
+
+```text
+/speckit
+```
+
+Your agent should load the Spec-Kit skill and display the subcommand router overview. To initialize your project's governing principles, run:
+
+```text
+/speckit constitution
+```
