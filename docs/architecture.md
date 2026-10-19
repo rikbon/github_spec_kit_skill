@@ -10,13 +10,20 @@ When initialized, Spec-Kit projects adhere to the following directory structure:
 
 ```
 ├── .claude/ or .agents/ or .opencode/
-│   └── skills/                  # Agent skill definitions
+│   └── skills/                  # Agent skill definitions (with references/, resources/, scripts/)
 ├── .specify/
 │   ├── memory/
 │   │   └── constitution.md      # Governing principles
-│   ├── templates/               # Preset overrides
-│   │   ├── spec-template.md
+│   ├── scripts/
+│   │   └── bash/                # Prerequisite & context setup scripts
+│   │       ├── check-prerequisites.sh
+│   │       ├── setup-plan.sh
+│   │       └── setup-tasks.sh
+│   ├── templates/               # Preset overrides & core templates
+│   │   ├── checklist-template.md
+│   │   ├── constitution-template.md
 │   │   ├── plan-template.md
+│   │   ├── spec-template.md
 │   │   └── tasks-template.md
 │   └── extensions.yml           # Hook registry
 └── specs/                       # Feature specifications and plans
@@ -75,5 +82,6 @@ When copying templates (e.g., spec template, plan template, task template), the 
 2. **Presets**: `.specify/presets/templates/`
 3. **Extensions**: `.specify/extensions/templates/`
 4. **Spec-Kit Core Defaults**: `.specify/templates/`
+5. **Skill Bundled Fallback**: `resources/templates/` (bundled inside the unified skill package for global installs)
 
 This allows you to change functional requirements structures or stack templates project-by-project without altering the global skills configuration.

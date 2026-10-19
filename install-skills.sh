@@ -37,6 +37,7 @@ usage() {
 # Parse options
 INSTALL_DEST=""
 SKILL_TYPE="unified"
+SKILL_TYPE_SPECIFIED="false"
 TARGET_AGENT="claude"
 TARGET_AGENT_SPECIFIED="false"
 
@@ -50,6 +51,7 @@ while [[ "$#" -gt 0 ]]; do
             ;;
         --type|-t)
             SKILL_TYPE="$2"
+            SKILL_TYPE_SPECIFIED="true"
             shift
             ;;
         --agent|-a)
@@ -135,6 +137,31 @@ if [[ "$TARGET_AGENT_SPECIFIED" == "false" ]]; then
     done
 fi
 
+# Ask skill layout type if not specified
+if [[ "$SKILL_TYPE_SPECIFIED" == "false" ]]; then
+    echo -e "${YELLOW}Which skill layout would you like to install?${NC}"
+    select type_opt in "Unified (/speckit master command)" "Granular (/speckit-* individual commands)" "Both" "Cancel"; do
+        case $type_opt in
+            "Unified (/speckit master command)")
+                SKILL_TYPE="unified"
+                break
+                ;;
+            "Granular (/speckit-* individual commands)")
+                SKILL_TYPE="granular"
+                break
+                ;;
+            "Both")
+                SKILL_TYPE="both"
+                break
+                ;;
+            *)
+                echo "Installation cancelled."
+                exit 0
+                ;;
+        esac
+    done
+fi
+
 # Helper to get target directories for a given agent
 get_target_dirs() {
     local agent="$1"
@@ -150,12 +177,9 @@ get_target_dirs() {
             ;;
         antigravity|agy)
             if [[ "$dest" == "global" ]]; then
-                echo "$HOME/.gemini/antigravity-cli/skills"
                 echo "$HOME/.gemini/config/skills"
-                echo "$HOME/.agents/skills"
             else
                 echo "$(pwd)/.agents/skills"
-                echo "$(pwd)/.agent/skills"
             fi
             ;;
         codex)
@@ -243,7 +267,7 @@ install_unified() {
     fi
     echo -e "${BLUE}Installing Unified Master Skill (/speckit) to $target_dir...${NC}"
     mkdir -p "$target_dir/speckit"
-    cp "$SOURCE_SKILLS_DIR/speckit/SKILL.md" "$target_dir/speckit/SKILL.md"
+    cp -R "$SOURCE_SKILLS_DIR/speckit/." "$target_dir/speckit/"
     echo -e "${GREEN}✓ Unified skill installed at: $target_dir/speckit/SKILL.md${NC}"
 }
 
@@ -262,27 +286,35 @@ install_granular() {
         if [[ -d "$skill_path" ]]; then
             skill_name=$(basename "$skill_path")
             mkdir -p "$target_dir/$skill_name"
-            cp "$skill_path/SKILL.md" "$target_dir/$skill_name/SKILL.md"
+            cp -R "$skill_path/." "$target_dir/$skill_name/"
             echo -e "${GREEN}✓ Granular skill installed: $target_dir/$skill_name${NC}"
         fi
     done
 }
 
-# Install default templates for local projects
+# Install default templates and helper scripts for local projects
 setup_local_templates() {
     if [[ "$INSTALL_DEST" == "local" ]]; then
         local target_project_root="$(pwd)"
-        local source_templates_dir="$SCRIPT_DIR/.specify"
+        local source_specify_dir="$SCRIPT_DIR/.specify"
         
         # Avoid copying to itself
-        if [[ "$(cd "$source_templates_dir" && pwd)" == "$(cd "$target_project_root" 2>/dev/null && pwd)/.specify" ]]; then
+        if [[ "$(cd "$source_specify_dir" && pwd)" == "$(cd "$target_project_root" 2>/dev/null && pwd)/.specify" ]]; then
             return
         fi
         
         if [[ ! -d "$target_project_root/.specify" ]]; then
             echo -e "${BLUE}Initializing .specify/ configuration folder in target project...${NC}"
-            cp -r "$source_templates_dir" "$target_project_root/.specify"
-            echo -e "${GREEN}✓ Default templates and configurations set up in .specify/${NC}"
+            cp -R "$source_specify_dir" "$target_project_root/.specify"
+            chmod +x "$target_project_root/.specify/scripts/bash/"*.sh 2>/dev/null || true
+            echo -e "${GREEN}✓ Default templates and helper scripts set up in .specify/${NC}"
+        else
+            if [[ ! -d "$target_project_root/.specify/scripts/bash" && -d "$source_specify_dir/scripts/bash" ]]; then
+                mkdir -p "$target_project_root/.specify/scripts"
+                cp -R "$source_specify_dir/scripts/bash" "$target_project_root/.specify/scripts/bash"
+                chmod +x "$target_project_root/.specify/scripts/bash/"*.sh 2>/dev/null || true
+                echo -e "${GREEN}✓ Helper scripts added to .specify/scripts/bash/${NC}"
+            fi
         fi
     fi
 }

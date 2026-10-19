@@ -1,16 +1,18 @@
 # Project Constitution: [PROJECT_NAME]
 
 ## 1. Project Vision
-[Brief vision statement of what the project aims to solve]
+[PROJECT_VISION]
 
 ## 2. Core Principles
-- **Principle 1**: [Description and Rationale]
-- **Principle 2**: [Description and Rationale]
+- **[PRINCIPLE_1_NAME]**: [PRINCIPLE_1_DESCRIPTION_AND_RATIONALE]
+- **[PRINCIPLE_2_NAME]**: [PRINCIPLE_2_DESCRIPTION_AND_RATIONALE]
+- **[PRINCIPLE_3_NAME]**: [PRINCIPLE_3_DESCRIPTION_AND_RATIONALE]
 
 ## 3. Design Constraints
-- [Non-negotiable architectural constraints, e.g. technology selection, deployment targets]
+- [DESIGN_CONSTRAINTS]
 
 ## 4. Governance & Amendments
-- Constitution Version: 1.0.0
-- Last Amended: [DATE]
-- Amendment Process: [How changes to this document are made and approved]
+- **Constitution Version**: [CONSTITUTION_VERSION]
+- **Ratification Date**: [RATIFICATION_DATE]
+- **Last Amended Date**: [LAST_AMENDED_DATE]
+- **Amendment Process**: [AMENDMENT_PROCESS]

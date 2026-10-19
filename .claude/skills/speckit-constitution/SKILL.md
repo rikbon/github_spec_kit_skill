@@ -59,7 +59,14 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 You are updating the project constitution at `.specify/memory/constitution.md`. This file is a TEMPLATE containing placeholder tokens in square brackets (e.g. `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]`). Your job is to (a) collect/derive concrete values, (b) fill the template precisely, and (c) propagate any amendments across dependent artifacts.
 
-**Note**: If `.specify/memory/constitution.md` does not exist yet, it should have been initialized from `.specify/templates/constitution-template.md` during project setup. If it's missing, copy the template first.
+**Note**: If `.specify/memory/constitution.md` does not exist yet:
+1. Create `.specify/memory/` directory if needed (`mkdir -p .specify/memory`).
+2. Resolve `constitution-template.md` using the Template Resolution Priority:
+   - `.specify/templates/overrides/constitution-template.md`
+   - `.specify/presets/templates/constitution-template.md`
+   - `.specify/extensions/templates/constitution-template.md`
+   - `.specify/templates/constitution-template.md`
+3. If a template is found, copy it to `.specify/memory/constitution.md`. If no template file exists in the workspace (e.g., global skill install without local `.specify/`), initialize `.specify/memory/constitution.md` with sections: `## 1. Project Vision`, `## 2. Core Principles`, `## 3. Design Constraints`, and `## 4. Governance & Amendments`.
 
 Follow this execution flow:
 

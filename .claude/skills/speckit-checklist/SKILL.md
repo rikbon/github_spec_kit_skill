@@ -78,9 +78,10 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Execution Steps
 
-1. **Setup**: Run `.specify/scripts/bash/check-prerequisites.sh --json` from repo root and parse JSON for FEATURE_DIR and AVAILABLE_DOCS list.
+1. **Setup**: Run `.specify/scripts/bash/check-prerequisites.sh --json` from repo root and parse JSON for `FEATURE_DIR` and `AVAILABLE_DOCS` list.
    - All file paths must be absolute.
-   - For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+   - **Native Tool Fallback**: If `.specify/scripts/bash/check-prerequisites.sh` is missing or fails to execute, do **NOT** fail. Resolve `FEATURE_DIR` natively by reading `"feature_directory"` from `.specify/feature.json` (or finding the latest directory under `specs/`), and scan `FEATURE_DIR` for available documents (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `data-model.md`, `quickstart.md`, `contracts/`).
+   - For single quotes in args like "I'm Groot", use escape syntax: e.g `'I'\''m Groot'` (or double-quote if possible: `"I'm Groot"`).
 
 2. **IF EXISTS**: Load `.specify/memory/constitution.md` for project principles and governance constraints.
 
@@ -104,7 +105,8 @@ You **MUST** consider the user input before proceeding (if not empty).
       - Scenario class gap (e.g., "No recovery flows detected—are rollback / partial failure paths in scope?")
 
    Question formatting rules:
-   - If presenting options, generate a compact table with columns: Option | Candidate | Why It Matters
+   - If your agent environment provides a native interactive question tool (e.g., `ask_question` or `AskUserQuestion`), you may use it to ask the clarifying questions directly.
+   - Otherwise, if presenting options in Markdown, generate a compact table with columns: `Option | Candidate | Why It Matters`
    - Limit to A–E options maximum; omit table if a free-form answer is clearer
    - Never ask the user to restate what they already said
    - Avoid speculative categories (no hallucination). If uncertain, ask explicitly: "Confirm whether X belongs in scope."

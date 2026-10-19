@@ -34,7 +34,7 @@ The automated installer natively maps skills to the paths expected by different 
 | Agent | Personal (Global) Skills | Project-Level (Local) Skills |
 | :--- | :--- | :--- |
 | **Claude Code** | `~/.claude/skills/` | `.claude/skills/` |
-| **Google Antigravity / Agy** | `~/.gemini/antigravity-cli/skills/`<br>`~/.gemini/config/skills/`<br>`~/.agents/skills/` | `.agents/skills/`<br>`.agent/skills/` |
+| **Google Antigravity / Agy** | `~/.gemini/config/skills/` | `.agents/skills/` |
 | **OpenAI Codex** | `~/.agents/skills/` | `.agents/skills/` |
 | **OpenCode** | `~/.config/opencode/skills/` | `.opencode/skills/` |
 | **Pi / General** | `~/.agents/skills/` | `.agents/skills/` |
@@ -46,16 +46,16 @@ The automated installer natively maps skills to the paths expected by different 
 If you prefer to configure your workspace manually:
 
 ### 1. Unified Skill (`/speckit`)
-To install the unified, subcommand-router skill, create the appropriate directory for your agent and copy the skill file:
+To install the unified, subcommand-router skill (along with its bundled `references/`, `resources/`, and `scripts/`), copy the skill directory to your agent's skills path:
 
 ```bash
 # Example for Claude Code (Global)
 mkdir -p ~/.claude/skills/speckit
-cp .claude/skills/speckit/SKILL.md ~/.claude/skills/speckit/SKILL.md
+cp -R .claude/skills/speckit/. ~/.claude/skills/speckit/
 
 # Example for Google Antigravity / Codex (Local)
 mkdir -p .agents/skills/speckit
-cp .claude/skills/speckit/SKILL.md .agents/skills/speckit/SKILL.md
+cp -R .claude/skills/speckit/. .agents/skills/speckit/
 ```
 
 ### 2. Granular Skills (`/speckit-*`)

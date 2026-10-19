@@ -95,8 +95,12 @@ Given that feature description, do this:
 
    **Create the directory and spec file**:
    - `mkdir -p SPECIFY_FEATURE_DIRECTORY`
-   - Resolve the active `spec-template` through the Spec Kit preset/template resolution stack (equivalent to `specify preset resolve spec-template`)
-   - Copy the resolved `spec-template` file to `SPECIFY_FEATURE_DIRECTORY/spec.md` as the starting point
+   - Resolve the active `spec-template.md` through the Spec-Kit template resolution priority:
+     1. `.specify/templates/overrides/spec-template.md`
+     2. `.specify/presets/templates/spec-template.md`
+     3. `.specify/extensions/templates/spec-template.md`
+     4. `.specify/templates/spec-template.md`
+   - Copy the resolved `spec-template.md` file to `SPECIFY_FEATURE_DIRECTORY/spec.md` as the starting point (if no template exists locally, create `spec.md` with standard sections: `Overview`, `User Scenarios & Testing`, `Functional Requirements`, `Key Entities`, `Success Criteria`, `Assumptions & Out of Scope`)
    - Set `SPEC_FILE` to `SPECIFY_FEATURE_DIRECTORY/spec.md`
    - Persist the resolved path to `.specify/feature.json`:
      ```json
@@ -201,7 +205,7 @@ Given that feature description, do this:
       - **If [NEEDS CLARIFICATION] markers remain**:
         1. Extract all [NEEDS CLARIFICATION: ...] markers from the spec
         2. **LIMIT CHECK**: If more than 3 markers exist, keep only the 3 most critical (by scope/security/UX impact) and make informed guesses for the rest
-        3. For each clarification needed (max 3), present options to user in this format:
+        3. For each clarification needed (max 3), if your agent environment provides a native interactive question tool (e.g., `ask_question` or `AskUserQuestion`), you may use it to present the options with the recommended choice first; otherwise, present options to the user in this Markdown format:
 
            ```markdown
            ## Question [N]: [Topic]

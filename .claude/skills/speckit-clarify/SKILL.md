@@ -67,8 +67,8 @@ Execution steps:
    - `FEATURE_DIR`
    - `FEATURE_SPEC`
    - (Optionally capture `IMPL_PLAN`, `TASKS` for future chained flows.)
-   - If JSON parsing fails, abort and instruct user to re-run `/speckit-specify` or verify feature branch environment.
-   - For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+   - **Native Tool Fallback**: If `.specify/scripts/bash/check-prerequisites.sh` is missing or fails to execute, do **NOT** abort. Instead, resolve `FEATURE_DIR` natively by reading `"feature_directory"` from `.specify/feature.json` (or finding the latest directory under `specs/`), and set `FEATURE_SPEC` to `FEATURE_DIR/spec.md`. Only abort if no feature directory or `spec.md` exists, instructing the user to run `/speckit-specify` first.
+   - For single quotes in args like "I'm Groot", use escape syntax: e.g `'I'\''m Groot'` (or double-quote if possible: `"I'm Groot"`).
 
 2. **IF EXISTS**: Load `.specify/memory/constitution.md` for project principles and governance constraints.
 
@@ -141,6 +141,7 @@ Execution steps:
 
 5. Sequential questioning loop (interactive):
     - Present EXACTLY ONE question at a time.
+    - If your agent environment provides a native interactive question tool (e.g., `ask_question` or `AskUserQuestion`), you may use it to ask the question (placing the recommended option first, prefixed with `(Recommended)`). Otherwise, use the Markdown format below:
     - For multiple‑choice questions:
        - **Analyze all options** and determine the **most suitable option** based on:
           - Best practices for the project type

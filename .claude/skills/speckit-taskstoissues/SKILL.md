@@ -57,22 +57,29 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-1. Run `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
-1. **IF EXISTS**: Load `.specify/memory/constitution.md` for project principles and governance constraints.
-1. From the executed script, extract the path to **tasks**.
-1. Get the Git remote by running:
-
-```bash
-git config --get remote.origin.url
-```
-
-> [!CAUTION]
-> ONLY PROCEED TO NEXT STEPS IF THE REMOTE IS A GITHUB URL
-
-1. **Fetch existing issues for deduplication**: Before creating anything, build the set of task IDs you are about to process from `tasks.md` (each is a `T` followed by three digits, e.g. `T001`). Then use the GitHub MCP server's `list_issues` tool to look for issues that already cover those IDs. Do not pass a `state` value, since omitting it makes the tool return both open and closed issues. Request `perPage: 100` to keep the number of calls down, and since the tool uses cursor-based pagination, request pages with the `after` parameter (using the `endCursor` from the previous response). For each issue title, match it against the task ID pattern `\bT\d{3}\b` (word boundaries so tokens like `ST001` or `T0010` are not matched by mistake; this also recognises titles written as `T001 ...`, `T001: ...` or `[T001] ...`) and, when it matches one of your task IDs, mark that ID as already having an issue. Stop paginating as soon as every task ID has been matched, or when there are no more pages, so you do not keep fetching the whole repository's issue history once all task IDs are accounted for. This bounds the number of calls on repos with large issue histories and still prevents duplicates when the command is re-run after `tasks.md` is regenerated or the skill is re-invoked.
-1. For each task in the list, use the GitHub MCP server to create a new issue in the repository that is representative of the Git remote. Task lines in `tasks.md` start with a markdown checkbox, so first strip the leading `- [ ]` (and any `[P]` / `[US#]` markers) to recover the task ID and its description. Create the issue with a single canonical title of the form `T001: <description>`, with the ID written once followed by the task description (for example, the line `- [ ] T001 Create project structure` becomes the title `T001: Create project structure`).
-   - **Skip** any task whose ID is already present in the set of existing issues from the previous step, and report it (for example, `T001 already has an issue, skipping`).
-   - Only create issues for tasks that do not yet have a matching issue.
+1. **Resolve Feature & Tasks Path**:
+   - Run `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` from repo root and parse `FEATURE_DIR` and `AVAILABLE_DOCS` list. All paths must be absolute.
+   - **Native Tool Fallback**: If `.specify/scripts/bash/check-prerequisites.sh` is missing or fails to execute, do **NOT** fail. Resolve `FEATURE_DIR` natively by reading `"feature_directory"` from `.specify/feature.json` (or finding the latest directory under `specs/`), and set `TASKS` to `FEATURE_DIR/tasks.md`.
+2. **IF EXISTS**: Load `.specify/memory/constitution.md` for project principles and governance constraints.
+3. **Verify Git Remote & Authentication**:
+   - Get the Git remote by running:
+     ```bash
+     git config --get remote.origin.url
+     ```
+   - > [!CAUTION]
+     > ONLY PROCEED TO NEXT STEPS IF THE REMOTE IS A GITHUB URL
+   - If using the GitHub CLI (`gh`), verify authentication via `gh auth status`. If neither GitHub MCP nor an authenticated `gh` CLI is available, output: `⚠️ Error: Neither GitHub MCP nor authenticated gh CLI found. Please run "gh auth login" to sync tasks.` and halt.
+4. **Fetch existing issues for deduplication**:
+   - Build the set of incomplete task IDs (`- [ ]`) you are about to process from `tasks.md` (each is a `T` followed by three digits, e.g. `T001`). Skip already completed tasks (`- [X]` or `- [x]`) unless the user explicitly requested syncing completed tasks.
+   - **Via GitHub MCP (preferred if available)**: Use the `list_issues` tool without a `state` filter (returns both open and closed issues), requesting `perPage: 100` and paginating with `after` (`endCursor`) until all task IDs are matched or no pages remain.
+   - **Via GitHub CLI (`gh` fallback)**: Run `gh issue list --state all --limit 200 --json number,title,url` against the target repository.
+   - Match each existing issue title against `\bT\d{3}\b` (word boundaries so tokens like `ST001` or `T0010` are not matched by mistake; recognises `T001 ...`, `T001: ...`, or `[T001] ...`). When it matches one of your task IDs, mark that ID as already having an issue.
+5. **Create Issues for Unsynced Tasks**:
+   - For each incomplete task in `tasks.md` not already in the existing issues set:
+     - Strip the leading `- [ ]` (and extract any `[P]` or `[US#]` markers) to recover the task ID and description.
+     - Create the issue in the repository matching the Git remote using a canonical title of the form `T001: <description>` (either via the GitHub MCP server or `gh issue create --title "T001: <description>" --body "<context>"`). If a `[US#]` tag is present and a matching label exists, attach it or include the story reference in the issue body.
+     - **Skip** any task whose ID already has an issue and report it (e.g., `T001 already has an issue, skipping`).
+   - Output a Markdown summary table of newly created and skipped issues with their issue numbers and URLs.
 
 > [!CAUTION]
 > UNDER NO CIRCUMSTANCES EVER CREATE ISSUES IN REPOSITORIES THAT DO NOT MATCH THE REMOTE URL
